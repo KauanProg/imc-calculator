@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Linking,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -67,10 +66,6 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
     },
   ];
 
-  const openWHOWebsite = () => {
-    Linking.openURL('https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight');
-  };
-
   return (
     <Modal
       animationType="slide"
@@ -119,7 +114,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
               <Text style={styles.sectionTitle}>Classificação</Text>
               {categories.map((category, index) => (
                 <View key={index} style={styles.categoryRow}>
-                  <View style={styles.categoryColor} />
+                  <View style={[styles.categoryColor, { backgroundColor: category.color }]} />
                   <View style={styles.categoryInfo}>
                     <Text style={styles.categoryName}>{category.name}</Text>
                     <Text style={styles.categoryRange}>{category.range}</Text>
@@ -165,15 +160,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ visible, onClose }) => {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.whoButton} onPress={openWHOWebsite}>
-              <Icon name="web" size={20} color="#FFFFFF" />
-              <Text style={styles.whoButtonText}>Site Oficial da OMS</Text>
-            </TouchableOpacity>
           </ScrollView>
-
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Entendi</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -308,35 +295,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     fontStyle: 'italic',
     lineHeight: 18,
-  },
-  whoButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2563EB',
-    padding: 16,
-    borderRadius: 12,
-    marginHorizontal: 24,
-    marginTop: 16,
-    marginBottom: 24,
-  },
-  whoButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginLeft: 8,
-  },
-  closeButton: {
-    backgroundColor: '#3B82F6',
-    marginHorizontal: 24,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
   },
 });
 

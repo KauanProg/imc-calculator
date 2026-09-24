@@ -1,4 +1,6 @@
-import { IMCResult } from '../types';
+import { ActivityLevel, IMCResult } from '../types';
+
+export const HEALTHY_RANGE = { min: 18.5, max: 24.9 };
 
 export const calculateIMC = (height: number, weight: number): IMCResult => {
   if (height <= 0 || weight <= 0) {
@@ -8,7 +10,7 @@ export const calculateIMC = (height: number, weight: number): IMCResult => {
       color: '#9CA3AF',
       description: 'Digite valores válidos para altura e peso',
       recommendations: ['Verifique se os valores estão corretos'],
-      healthyRange: { min: 18.5, max: 24.9 },
+      healthyRange: HEALTHY_RANGE,
     };
   }
 
@@ -23,8 +25,7 @@ const getIMCCategory = (imc: number): IMCResult => {
   let category = '';
   let color = '';
   let description = '';
-  const recommendations: string[] = [];
-  const healthyRange = { min: 18.5, max: 24.9 };
+  let recommendations: string[] = [];
 
   if (imc < 16) {
     category = 'Magreza Grave';
@@ -106,11 +107,12 @@ const getIMCCategory = (imc: number): IMCResult => {
     color,
     description,
     recommendations,
-    healthyRange,
+    healthyRange: HEALTHY_RANGE,
   };
 };
 
 export const calculateIdealWeight = (height: number): { min: number; max: number } => {
+  if (!Number.isFinite(height) || height <= 0) return { min: 0, max: 0 };
   const heightInMeters = height / 100;
   const minWeight = 18.5 * (heightInMeters * heightInMeters);
   const maxWeight = 24.9 * (heightInMeters * heightInMeters);
@@ -126,8 +128,9 @@ export const calculateDailyCalories = (
   height: number,
   age: number,
   gender: 'male' | 'female',
-  activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active' = 'moderate'
+  activityLevel: ActivityLevel = 'moderate'
 ): number => {
+  if (![weight, height, age].every((value) => Number.isFinite(value) && value > 0)) return 0;
   // Fórmula de Harris-Benedict
   let bmr: number;
   

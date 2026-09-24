@@ -1,135 +1,30 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Gender } from '../types';
 
-interface GenderSelectorProps {
-  selectedGender: Gender;
-  onGenderChange: (gender: Gender) => void;
-}
+interface Props { selectedGender: Gender; onGenderChange: (gender: Gender) => void }
 
-const GenderSelector: React.FC<GenderSelectorProps> = ({
-  selectedGender,
-  onGenderChange,
-}) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Gênero</Text>
-      <View style={styles.genderContainer}>
-        <TouchableOpacity
-          style={[
-            styles.genderButton,
-            selectedGender === 'male' && styles.genderButtonSelected,
-          ]}
-          onPress={() => onGenderChange('male')}
-        >
-          <View
-            style={[
-              styles.iconContainer,
-              selectedGender === 'male' && styles.iconContainerSelected,
-            ]}
-          >
-            <Icon
-              name="gender-male"
-              size={32}
-              color={selectedGender === 'male' ? '#3B82F6' : '#9CA3AF'}
-            />
-          </View>
-          <Text
-            style={[
-              styles.genderText,
-              selectedGender === 'male' && styles.genderTextSelected,
-            ]}
-          >
-            Masculino
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.genderButton,
-            selectedGender === 'female' && styles.genderButtonSelected,
-          ]}
-          onPress={() => onGenderChange('female')}
-        >
-          <View
-            style={[
-              styles.iconContainer,
-              selectedGender === 'female' && styles.iconContainerSelected,
-            ]}
-          >
-            <Icon
-              name="gender-female"
-              size={32}
-              color={selectedGender === 'female' ? '#EC4899' : '#9CA3AF'}
-            />
-          </View>
-          <Text
-            style={[
-              styles.genderText,
-              selectedGender === 'female' && styles.genderTextSelected,
-            ]}
-          >
-            Feminino
-          </Text>
-        </TouchableOpacity>
-      </View>
+const GenderSelector: React.FC<Props> = ({ selectedGender, onGenderChange }) => (
+  <View style={styles.container}>
+    <Text style={styles.label}>Gênero</Text>
+    <View style={styles.row}>
+      {([
+        ['male', 'gender-male', 'Masculino'], ['female', 'gender-female', 'Feminino'],
+      ] as const).map(([value, icon, label]) => {
+        const selected = selectedGender === value;
+        return <TouchableOpacity key={value} activeOpacity={0.8} style={[styles.button, selected && styles.buttonSelected]} onPress={() => onGenderChange(value)}>
+          <Icon name={icon} size={22} color={selected ? '#2563EB' : '#64748B'} /><Text style={[styles.text, selected && styles.textSelected]}>{label}</Text>
+        </TouchableOpacity>;
+      })}
     </View>
-  );
-};
+  </View>
+);
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 16,
-  },
-  genderContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  genderButton: {
-    flex: 0.48,
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#F9FAFB',
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
-  },
-  genderButtonSelected: {
-    backgroundColor: '#F0F9FF',
-    borderColor: '#3B82F6',
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    marginBottom: 12,
-  },
-  iconContainerSelected: {
-    backgroundColor: '#EFF6FF',
-  },
-  genderText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  genderTextSelected: {
-    color: '#1F2937',
-  },
+  container: { marginBottom: 24 }, label: { fontSize: 15, fontWeight: '600', color: '#334155', marginBottom: 10 }, row: { flexDirection: 'row', gap: 10 },
+  button: { flex: 1, minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#CBD5E1', borderRadius: 4 },
+  buttonSelected: { backgroundColor: '#EFF6FF', borderColor: '#2563EB' }, text: { fontSize: 14, color: '#475569', fontWeight: '600' }, textSelected: { color: '#1D4ED8' },
 });
 
 export default GenderSelector;
